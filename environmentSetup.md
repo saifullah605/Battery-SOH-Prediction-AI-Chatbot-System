@@ -55,7 +55,7 @@ pip install scikit-learn numpy pandas matplotlib
 Run the following command to confirm everything is installed correctly:
 
 ```bash
-python -c "import sklearn, numpy, pandas, matplotlib; print('All packages installed successfully!')"
+python -c 'import sklearn, numpy, pandas, matplotlib; print("All packages installed successfully!")'
 ```
 
 ---
