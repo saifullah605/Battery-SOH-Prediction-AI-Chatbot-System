@@ -45,7 +45,7 @@ You’ll know it’s active when your terminal prompt shows `(venv)`.
 Once the environment is activated, install the required libraries:
 
 ```bash
-pip install scikit-learn numpy pandas matplotlib
+pip install -r requirements.txt
 ```
 
 ---
