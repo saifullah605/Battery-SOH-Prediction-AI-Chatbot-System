@@ -25,9 +25,10 @@ def model():
     print(f"mae: {mae}")
 
     results = pd.DataFrame({
-        "True SOH": yTest.values,
+        "True SOH": yTest,
         "Predicted SOH": yPred,
-        "Healthy": yPred >= 0.85
+        "True Health": yTest >= 0.85,
+        "Predicted Health": yPred >= 0.85
     })
     
     pd.set_option('display.max_columns', None)  
