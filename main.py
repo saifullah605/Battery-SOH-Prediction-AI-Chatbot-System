@@ -5,6 +5,8 @@ from sklearn.metrics import r2_score, mean_absolute_error
 
 
 def model():
+    print("Please enter the threshold (value that will dictate if a battery is healthy or not. If the SOH is higher than the threshold, it is considered healthym otherwise unhealthy)") 
+    th = float(input())
     df = pd.read_excel("./PulseBat Dataset.xlsx", sheet_name="SOC ALL")
 
     features = [f"U{i}" for i in range(1,22)] # only need the cells as features
@@ -27,8 +29,8 @@ def model():
     results = pd.DataFrame({
         "True SOH": yTest,
         "Predicted SOH": yPred,
-        "True Health": yTest >= 0.85,
-        "Predicted Health": yPred >= 0.85
+        "True Health": yTest >= th,
+        "Predicted Health": yPred >= th
     })
     
     pd.set_option('display.max_columns', None)  
