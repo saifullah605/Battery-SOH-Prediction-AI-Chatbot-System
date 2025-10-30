@@ -50,9 +50,9 @@ User query: {userQuestion}
     return response.text
 
 
-print(askGeminai("What is the SOH of battery 5?"))
 
-print(askGeminai("How do lithium batteries affect the environment?"))
+
+print(askGeminai("what is the capital of france"))
 
 
 
