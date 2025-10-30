@@ -1,12 +1,13 @@
 from google import genai
 from dotenv import load_dotenv
+import pandas as pd
 
 load_dotenv()
-
 client = genai.Client()
 
-response = client.models.generate_content(
-    model="gemini-2.5-flash", contents="Explain how AI works in a few words"
-)
+df = pd.read_excel("./PulseBat Dataset.xlsx")
 
-print(response.text)
+
+
+
+
