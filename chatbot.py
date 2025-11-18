@@ -52,7 +52,7 @@ User query: {userQuestion}
 
 
 
-print(askGeminai("what is the capital of france"))
+print(askGeminai("what are the types of batteries"))
 
 
 
