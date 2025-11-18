@@ -52,7 +52,7 @@ User query: {userQuestion}
 
 
 
-print(askGeminai("what are the types of batteries"))
+
 
 
 
