@@ -4,9 +4,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_absolute_error
 
 
-def model():
-    print("Please enter the threshold (value that will dictate if a battery is healthy or not. If the SOH is higher than the threshold, it is considered healthym otherwise unhealthy)") 
-    th = float(input())
+def model(inputdf):
+    inputDataframe = pd.DataFrame(inputdf)
+    th = 0.85
     df = pd.read_excel("./PulseBat Dataset.xlsx", sheet_name="SOC ALL")
 
     features = [f"U{i}" for i in range(1,22)] # only need the cells as features
@@ -14,10 +14,10 @@ def model():
     x = df[features]
     y = df["SOH"]
 
-    xTrain, xTest, yTrain, yTest = train_test_split(x,y, test_size=0.2, random_state=21) #random state is arbitrary, but should be placed for the same results
+    #xTrain, xTest, yTrain, yTest = train_test_split(x,y, test_size=0.2, random_state=21) #random state is arbitrary, but should be placed for the same results
 
     model = LinearRegression()
-    model.fit(xTrain, yTrain)
+    model.fit(x, y)
 
     yPred = model.predict(xTest)
     r2 = r2_score(yTest, yPred)
