@@ -75,6 +75,6 @@ test_input = {
 }
 
 
-print(model([test_input]))
+
 
 
