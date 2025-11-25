@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from chatbot import askGeminai
+from linearRegression import model
 
 
 app = Flask(__name__)
@@ -39,6 +40,40 @@ def chatbot():
         "response": askGeminai(prompt)
     }), 200
     
+@app.route("/api/model", methods=["POST"])
+def regression():
+    data = request.get_json()
+
+    if not data:
+        return jsonify(
+            {
+                "error": "JSON body is required"
+            }
+        ), 400
+    
+    if "values" not in data:
+        return jsonify(
+            {
+                "error": "values are required"
+            }
+        ), 400
+    
+    try:
+        return jsonify(model(data["values"])), 200
+    except Exception as e:
+        return jsonify ({
+            "error": str(e)
+        }), 400
+    
+
+
+
+
+    
+
+
+
+
 
 
 
