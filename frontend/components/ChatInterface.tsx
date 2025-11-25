@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, type KeyboardEvent } from 'react'
 import { Send, LogOut } from 'lucide-react'
 import MessageBubble from './MessageBubble'
 import LoadingDots from './LoadingDots'
-import { sendChatMessage } from '@/lib/api'
 import { getStoredUser, clearStoredUser } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
 
@@ -41,6 +40,21 @@ export default function ChatInterface() {
     scrollToBottom()
   }, [messages])
 
+  // -------------------------------------------------------
+  // SEND MESSAGE TO BACKEND USING /api/chatbot
+  // -------------------------------------------------------
+  const sendToBackend = async (prompt: string) => {
+    const response = await fetch("http://localhost:8080/api/chatbot", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),  // IMPORTANT 🔥
+    })
+
+    return await response.json()
+  }
+
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return
 
@@ -51,22 +65,22 @@ export default function ChatInterface() {
       timestamp: new Date(),
     }
 
-    setMessages((prev: Message[]) => [...prev, userMessage])
+    setMessages((prev) => [...prev, userMessage])
     const messageToSend = inputValue
     setInputValue('')
     setLoading(true)
 
     try {
-      const data = await sendChatMessage(messageToSend)
+      const data = await sendToBackend(messageToSend)
 
       const botMessage: Message = {
         id: nextIdRef.current++,
-        text: data?.response || data?.error || 'Sorry, I encountered an error.',
+        text: data?.response || "Sorry, I couldn't process that.",
         sender: 'bot',
         timestamp: new Date(),
       }
 
-      setMessages((prev: Message[]) => [...prev, botMessage])
+      setMessages((prev) => [...prev, botMessage])
     } catch (error) {
       const errorMessage: Message = {
         id: nextIdRef.current++,
@@ -75,7 +89,7 @@ export default function ChatInterface() {
         timestamp: new Date(),
       }
 
-      setMessages((prev: Message[]) => [...prev, errorMessage])
+      setMessages((prev) => [...prev, errorMessage])
     } finally {
       setLoading(false)
     }
@@ -144,7 +158,7 @@ export default function ChatInterface() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about battery health, maintenance, recycling..."
+            placeholder="Ask about battery SOH, maintenance, or anything else..."
             disabled={loading}
             className="flex-1 bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500"
           />
