@@ -164,15 +164,7 @@ export default function PredictionPage() {
           </div>
 
           <div className="flex gap-3">
-            <button
-              onClick={() => document.getElementById('excel-upload')?.click()}
-              className="
-                px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600
-                transition text-white font-medium shadow-md
-              "
-            >
-              Upload Excel
-            </button>
+          
           </div>
         </div>
       </div>
