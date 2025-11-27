@@ -29,8 +29,9 @@ export default function ChatInterface() {
 
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const nextIdRef = useRef<number>(messages.length + 1)
+  const nextIdRef = useRef<number>(2)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -46,10 +47,8 @@ export default function ChatInterface() {
   const sendToBackend = async (prompt: string) => {
     const response = await fetch("http://localhost:8080/api/chatbot", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),  // IMPORTANT 🔥
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
     })
 
     return await response.json()
@@ -109,9 +108,12 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col h-full overflow-hidden">
+
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600/10 to-cyan-600/10 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-blue-600/10 to-cyan-600/10 
+                      border-b border-slate-700 px-6 py-4 
+                      flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-100">Battery SOH Assistant</h2>
           <p className="text-sm text-slate-400">Powered by AI</p>
@@ -119,17 +121,10 @@ export default function ChatInterface() {
 
         <div className="flex items-center gap-4">
           <div className="text-right">
-            <p className="text-sm font-medium text-slate-100">{user?.name}</p>
-            <p className="text-xs text-slate-500">{user?.email}</p>
+          
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="p-2 bg-slate-700/50 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-red-400 transition-all"
-            title="Logout"
-          >
-            <LogOut size={20} />
-          </button>
+         
         </div>
       </div>
 
@@ -141,7 +136,9 @@ export default function ChatInterface() {
 
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-slate-700/60 text-slate-100 rounded-2xl rounded-bl-none border border-slate-600/50 px-6 py-4">
+            <div className="bg-slate-700/60 text-slate-100 rounded-2xl 
+                            rounded-bl-none border border-slate-600/50 
+                            px-6 py-4">
               <LoadingDots />
             </div>
           </div>
@@ -160,13 +157,17 @@ export default function ChatInterface() {
             onKeyDown={handleKeyDown}
             placeholder="Ask about battery SOH, maintenance, or anything else..."
             disabled={loading}
-            className="flex-1 bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-3 text-slate-100 placeholder-slate-500"
+            className="flex-1 bg-slate-700/50 border border-slate-600 
+                       rounded-lg px-4 py-3 text-slate-100 
+                       placeholder-slate-500"
           />
 
           <button
             onClick={handleSendMessage}
             disabled={loading || !inputValue.trim()}
-            className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg px-6 py-3 font-semibold flex items-center gap-2 transition-all"
+            className="bg-gradient-to-r from-blue-600 to-cyan-600 
+                       text-white rounded-lg px-6 py-3 font-semibold 
+                       flex items-center gap-2 transition-all"
           >
             <Send className="w-4 h-4" />
             Send

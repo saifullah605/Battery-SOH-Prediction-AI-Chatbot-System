@@ -9,19 +9,30 @@ client = genai.Client()
 df = pd.read_excel("./PulseBat Dataset.xlsx")
 
 
-def ragFromExcel(query : str): 
-    queryLowered = query.lower()
-    match = re.search(r"battery\s*(\d+)", queryLowered)
+import re
 
-    if match:
-        num = int(match.group(1))
-        row = df[df["No."] == num]
-        if row.empty:
-            return "No data found for the query"
-        else:
-            return row.to_string(index=False)
-    
+def ragFromExcel(query: str):
+    q = query.lower().strip()
+
+    # battery number search: "battery 5" etc.
+    battery_nums = re.findall(r"battery\s*(\d+)", q)
+    if battery_nums:
+        nums = [int(n) for n in battery_nums]
+        rows = df[df["No."].isin(nums)]
+        return rows.to_string(index=False) if not rows.empty else "No data found"
+
+    # SOH exact value search: "soh of 0.82", "soh of .75"
+    soh_match = re.search(r"soh\s*of\s*([0-9]*\.?[0-9]+)", q)
+    if soh_match:
+        value = float(soh_match.group(1))
+
+        # Floating-point safe comparison (±0.0001)
+        rows = df[abs(df["SOH"] - value) < 0.0001]
+
+        return rows.to_string(index=False) if not rows.empty else "No data found"
+
     return ""
+
 
 
 def askGeminai(userQuestion):
@@ -35,7 +46,7 @@ Answer the user query only if it is related to battery data, SOH, SOC, voltages,
 or environmental impacts of batteries. Be concise and technical.
 
 for example, if the user ask for the SOH for battery 5, use the context to get the battery's SOH, if context not available, tell user
-information not available from your question.
+information not available from your question. If the SOH value is greater than 0.85, state the battery is healthy otherweise mention it is noi healthy.
 
 If the user ask general questions on batteries and/or about their enviromental impacts, answer accordingly,
 
