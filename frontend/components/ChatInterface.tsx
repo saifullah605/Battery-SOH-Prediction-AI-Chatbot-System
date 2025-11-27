@@ -41,9 +41,9 @@ export default function ChatInterface() {
     scrollToBottom()
   }, [messages])
 
-  // -------------------------------------------------------
-  // SEND MESSAGE TO BACKEND USING /api/chatbot
-  // -------------------------------------------------------
+  // -------------------------------
+  // SEND MESSAGE TO BACKEND
+  // -------------------------------
   const sendToBackend = async (prompt: string) => {
     const response = await fetch("http://localhost:8080/api/chatbot", {
       method: "POST",
@@ -110,25 +110,27 @@ export default function ChatInterface() {
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
 
-      {/* Header */}
+      {/* HEADER WITH BUTTON */}
       <div className="bg-gradient-to-r from-blue-600/10 to-cyan-600/10 
                       border-b border-slate-700 px-6 py-4 
                       flex items-center justify-between">
+
         <div>
           <h2 className="text-2xl font-bold text-slate-100">Battery SOH Assistant</h2>
           <p className="text-sm text-slate-400">Powered by AI</p>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-          
-          </div>
+        <button
+          onClick={() => router.push('/predict')}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 
+                     text-white rounded-lg transition-colors"
+        >
+          Go to Prediction Tool
+        </button>
 
-         
-        </div>
       </div>
 
-      {/* Messages */}
+      {/* CHAT MESSAGES */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} />
@@ -147,7 +149,7 @@ export default function ChatInterface() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
+      {/* INPUT BAR */}
       <div className="border-t border-slate-700 bg-slate-800/50 p-6">
         <div className="flex gap-3">
           <input
